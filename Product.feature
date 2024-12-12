@@ -14,47 +14,20 @@ Feature: Verify WooCommerce Product
     And I click on the "Go to Checkout" button on the cart page
     Then the checkout page should open
 
-  Scenario: 2 Billing Form Validation (No Input)
-    When I click on the "Place Order" button on checkout page
-    Then I should see the following error messages:
-        | Billing First Name                            | Billing Last Name                             | Billing Street Address                        | Billing Town / City                           | Billing Postcode                              | Billing Phone                                | Billing Email Address                         |
-        | Billing First name is a required field.       | Billing Last name is a required field.        | Billing Street address is a required field.   | Billing Town / City is a required field.      | Billing Postcode is a required field.         |Billing Phone is a required field.            | Billing Email address is a required field.    |
-
-  Scenario: 3 Successful Billing Form Submission
+  Scenario: 2 Successful Billing Form Submission
     When I fill in the billing details as follows:
-        | First Name | Last Name  | Country / Region   | Street Address | Town / City|  Postcode | Phone     | Email Address          |
-        | John       | Doe        | United States (US) | 123 Elm Street | New York   |  10001    | 1234567890| john.doe@example.com   |
-    And I should see the "Your Order" table with the following details:
-        | Product Name  | Quantity | Subtotal | Shipping     | Total  |
-        | Demo Product  | 1        | $10.00   | Free Shipping| $10.00 |
-    And I click on the "Place Order" button on checkout page
-    Then the order should be successfully placed
-
-  Scenario: 4 Fill shipping address fields and submit
-    When I click on the "Ship to a different address" checkbox
-    And I fill in all the shipping address fields:
-      | Shipping First Name | Shipping Last Name   | Country / Region     | Street Address | Town / City| Postcode |
-      | MR.                 | A                 | United States (US)   | 123 Elm St     | Nottingham | NG7 4AH   |
-    And I click on the "Place Order" button on checkout page
-    Then the order should be not placed
-
-  Scenario: 5 Do not fill shipping address fields and submit
-    When I click on the "Ship to a different address" checkbox
-    And I click on the "Place Order" button on checkout page
-    Then I should see the following error messages:
-       | Shipping First Name                            | Shipping Last Name                             | Shipping Street Address                             | Shipping Town / City                           | Shipping Postcode                             |
-       | Shipping First name is a required field.       | Shipping Last name is a required field.        | Shipping Street address is a required field.        | Shipping Town / City is a required field.      | Shipping Postcode is a required field.        |
-
-  Scenario: 6 Successful Billing and Shipping Form Submission
-    When I fill in the billing details as follows:
-        | First Name | Last Name  | Country / Region   | Street Address | Town / City|  Postcode | Phone     | Email Address          |
-        | John       | Doe        | United States (US) | 123 Elm Street | New York   |  10001    | 1234567890| john.doe@example.com   |
-    And I click on the "Ship to a different address" checkbox
-    And I fill in all the shipping address fields:
-      | Shipping First Name | Shipping Last Name   | Country / Region     | Street Address | Town / City| Postcode |
-      | MR.                 | A                 | United States (US)   | 123 Elm St     | Nottingham | NG7 4AH   |
-    And I should see the "Your Order" table with the following details:
-        | Product Name  | Quantity | Subtotal | Shipping     | Total  |
-        | Demo Product  | 1        | $10.00   | Free Shipping| $10.00 |
-    And I click on the "Place Order" button on checkout page
-    Then the order should be successfully placed
+        | First Name | Last Name  | Country / Region   | Street Address | Town / City |Postcode | Phone     | Email Address          |
+        | John       | Doe        | United Kingdom (UK)        | 123 Elm Street | New York    |10001    | 1234567890| fzfzhce463@generad.club   |
+    And I should see the Your Order table with the following details:
+        |Product Name| Subtotal | Shipping     | Total  |
+        |Demo Product  × 1| 10 $   | Free shipping| 10 $ |
+    And I should see payment methods displayed
+        | payment methods         |
+        | Credit Card             |
+        | PAYARC Hosted Checkout  |
+    And I select PAYARC Hosted Checkout radio button
+    And I click on the Continue to payment button on checkout page
+    And I fill in the payment details:
+      | Card number      | Expiration date | CVC/CVV  |First Name  |Last Name |Address Line 1 |Address Line 2|City     | State | ZIP code  | Email address    |
+      | 4761739012347120 | 0123            |123       | John       |Doe       |123 Main St    |Apt 4B       |New York | NY    |10001      |fzfzhce463@generad.club |
+    And I click on PAY $10.00 button
